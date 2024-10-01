@@ -4,14 +4,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.Mockito;
 import ru.netology.dto.Poster;
-
-import static org.mockito.Mockito.*;
 
 class PosterManagerTest {
     PosterManager posterManager;
-    OutputService outputServiceMock = mock(OutputService.class);
 
     // BeforeEach здесь не подойдёт, так как менеджер нужно ещё создавать, а у нас 2 разных конструктора, которые тоже нужно протестировать
     void setUpValues() {
@@ -37,46 +33,16 @@ class PosterManagerTest {
     void testAddPoster() {
         setUpValues();
         posterManager.addPoster(new Poster("Inception 2", "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.", "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg", "2010"));
-        int actualCount = posterManager.getAll().length;
+        int actualCount = posterManager.findAll().length;
 
         int expectedCount = 7;
         Assertions.assertEquals(expectedCount, actualCount);
     }
 
     @Test
-    public void testFindAll() {
-        setUpValues();
-        posterManager.setOutputService(outputServiceMock);
-        posterManager.findAll();
-
-        verify(outputServiceMock, times(6)).printInConsole(Mockito.anyString());
-    }
-
-    @Test
-    public void testFindLastDefault() {
-        setUpValues();
-        posterManager.setOutputService(outputServiceMock);
-
-        posterManager.findLast();
-
-        verify(outputServiceMock, times(5)).printInConsole(Mockito.anyString());
-    }
-
-    @ParameterizedTest
-    @CsvSource({"0,0", "1,1", "3,3", "6,6", "7,6", "5,5"})
-    public void testFindLastCustom(int outputLimit, int expectedCount) {
-        setUpValues(outputLimit);
-        posterManager.setOutputService(outputServiceMock);
-
-        posterManager.findLast();
-
-        verify(outputServiceMock, times(expectedCount)).printInConsole(Mockito.anyString());
-    }
-
-    @Test
     void testGetAll() {
         setUpValues();
-        int actualCount = posterManager.getAll().length;
+        int actualCount = posterManager.findAll().length;
 
         int expectedCount = 6;
         Assertions.assertEquals(expectedCount, actualCount);
@@ -85,7 +51,7 @@ class PosterManagerTest {
     @Test
     void testGetLatestDefault() {
         setUpValues();
-        int actualCount = posterManager.getLatest().length;
+        int actualCount = posterManager.findLast().length;
 
         int expectedCount = 5;
         Assertions.assertEquals(expectedCount, actualCount);
@@ -95,7 +61,7 @@ class PosterManagerTest {
     @CsvSource({"0,0", "1,1", "3,3", "6,6", "7,6", "5,5"})
     void testGetLatestCustom(int outputLimit, int expectedCount) {
         setUpValues(outputLimit);
-        int actualCount = posterManager.getLatest().length;
+        int actualCount = posterManager.findLast().length;
 
         Assertions.assertEquals(expectedCount, actualCount);
     }

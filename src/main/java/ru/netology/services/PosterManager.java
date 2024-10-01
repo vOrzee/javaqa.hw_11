@@ -1,15 +1,10 @@
 package ru.netology.services;
 
-import lombok.AccessLevel;
-import lombok.Setter;
 import ru.netology.dto.Poster;
 
 public class PosterManager {
     private Poster[] posters = new Poster[0];
     private final int outputLimit;
-
-    @Setter(AccessLevel.PROTECTED)
-    private OutputService outputService = new OutputService();
 
     public PosterManager(int outputLimit) {
         this.outputLimit = outputLimit;
@@ -26,32 +21,16 @@ public class PosterManager {
         posters = newPosters;
     }
 
-    public void findAll() {
-        for (Poster poster : posters) {
-            outputService.printInConsole(poster.toString()); // "Вывод"
-        }
-    }
-
-    public void findLast() {
-        int outputSize = posters.length;
-        if (outputSize > outputLimit) {
-            outputSize = outputLimit;
-        }
-        for (int i = 0; i < outputSize; i++) {
-            outputService.printInConsole(posters[posters.length - 1 - i].toString()); // "Вывод"
-        }
-    }
-
-    public Poster[] getAll() {
+    public Poster[] findAll() {
         return posters; // "Возврат"
     }
 
-    public Poster[] getLatest() {
+    public Poster[] findLast() {
         int outputArraySize = posters.length;
         if (outputArraySize > outputLimit) {
             outputArraySize = outputLimit;
         }
-        Poster[] lastPosters= new Poster[outputArraySize];
+        Poster[] lastPosters = new Poster[outputArraySize];
 
         for (int i = 0; i < outputArraySize; i++) {
             lastPosters[i] = posters[posters.length - 1 - i];
